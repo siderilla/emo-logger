@@ -2,7 +2,7 @@ export default class SuperHeader extends HTMLElement {
     
     constructor() {
         super();
-        this.shadow = this.attachShadow({mode: 'open'});
+        this.attachShadow({mode: 'open'});
     }
 
     connectedCallback() {
@@ -14,11 +14,12 @@ export default class SuperHeader extends HTMLElement {
         const style = document.createElement('style');
         style.innerText = `
             .main-title {
-                font-family: "Verdena";
-                background-color: yellow;
+                font-family: "Verdana";
+                background-color: coral;
+				color: white;
             }
         `
-        this.shadow.appendChild(style);
+        this.shadowRoot.appendChild(style);
     }
     
     render() {
@@ -27,7 +28,9 @@ export default class SuperHeader extends HTMLElement {
         const titleAttribute = this.getAttribute('super-title');
         const titleNode = document.createTextNode(titleAttribute);
         title.appendChild(titleNode);
-        this.shadow.appendChild(title);
+        this.shadowRoot.appendChild(title);
     }
 
 }
+
+customElements.define('super-header', SuperHeader);

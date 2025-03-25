@@ -1,6 +1,5 @@
 export default class SuperDialog extends HTMLElement {
     
-    
     constructor() {
         super();
         this.shadow = this.attachShadow({mode: 'open'});
@@ -28,3 +27,5 @@ export default class SuperDialog extends HTMLElement {
     }
 
 }
+
+customElements.define('super-dialog', SuperDialog);
