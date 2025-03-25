@@ -57,3 +57,5 @@ composed: true		- evento 'composed' può attraversare il confine dello shadow DO
 					ma con composed: true, quell'evento può essere ricevuto anche 
 					da elementi esterni allo shadow DOM, rendendo più semplice 
 					la comunicazione tra componenti
+
+/// APPROFONDIRE DIALOG E SHOWMODAL - CASINO
