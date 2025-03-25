@@ -1,0 +1,59 @@
+// CONCETTO DI 'SERVICE'
+il service è un semplice modulo (senza essere custom element)
+	il modo più più semplice è non farlo estendere HTMLElement 
+	(ovvero web component), ma creare un modulo javascript normale 
+	che gestisce i dati e che esporta funzioni o variabili
+	dopo di ché i vari componenti importeranno service per usarlo
+
+// IL COSTRUTTORE
+- viene eseguito quando l'istanza dell'elemento viene creata, 
+	prima che l'elemento sia inserito nel DOM
+- è utile per impostare lo shadow DOM (this.attachShadow({mode: 'open'})) 
+	e inizializzare le proprietà
+- si può chiamare qui il render solo se non c'è bisogno di accedere a 
+	elementi parent o eseguire operazioni che richiedono il DOM, 
+	ma siccome non si sa mai, meglio farlo sempre in connectedCallback()
+
+// CONNECTEDCALLBACK che cazz è
+- viene invocato ogni volta che l'elemento viene inserito nel DOM
+- è il posto ideale per raggiungere event listeners, fetch, interazioni con DOM
+- alcuni preferiscono chiamare render qui perché hanno la garanzia che l'elemento
+	è effettivamente inserito nel documento
+
+// IN SINTESI
+	lavorando in connectedCallback(), hai la certezza che l'elemento è già 
+	parte del documento, e quindi è più sicuro accedere a componenti figli o 
+	a stili definiti a livello globale. In un'app complessa questo può evitare 
+	problemi di sincronizzazione o errori nel caso in cui il rendering 
+	o la registrazione degli eventi dipendano dal fatto che l'elemento sia effettivamente 
+	“live” nella pagina
+	
+	- Nel Costruttore: Inizializzi lo shadow DOM e le proprietà
+		Puoi anche chiamare this.render() se non hai bisogno di interagire 
+		con il DOM esterno
+	- In connectedCallback: Imposti gli event listeners e gestisci tutto 
+		ciò che richiede che l'elemento sia inserito nel DOM
+
+
+// this.dispatchEvent(new CustomEvent('emotion-add-request', {
+// 	bubbles: true,
+// 	composed: true
+// 	}));
+
+this.dispatchEvent 	- questo metodo 'spedisce' un evento dall'elemento corrente (this)
+					in questo modo il componente può comunicare ad altri componenti
+					o al DOM che qualcosa è successo senza dover necessariamente 
+					conoscere chi lo ascolta
+
+new CustomEvent('emotion-add-request' ... ) - crea un nuovo evento personalizzato
+					permette di definire messaggi specifici per il componente
+
+bubbles: true 		- evento 'bolle' verso l'alto nella gerarchia DOM
+					impostando bubbles a true, l'evento può essere intercettato non 
+					solo sul componente che lo ha emesso, ma anche da eventuali 
+					elementi parent (per esempio main) che ascoltano questo tipo di evento
+composed: true		- evento 'composed' può attraversare il confine dello shadow DOM
+					con le shadow di default gli eventi non escono dall'ombra, 
+					ma con composed: true, quell'evento può essere ricevuto anche 
+					da elementi esterni allo shadow DOM, rendendo più semplice 
+					la comunicazione tra componenti
